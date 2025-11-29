@@ -33,7 +33,7 @@
     "react-hook-form": "^7.67.0",
     "recharts": "^3.5.1",
     "supports-color": "^10.2.2",
-    "tailwindcss": "^4.1.17",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.9.3",
     "zod": "^4.1.13"
   },

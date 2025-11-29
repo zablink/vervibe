@@ -1,0 +1,243 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  username      String?   @unique
+  fullName      String?
+  avatarUrl     String?
+  role          UserRole  @default(FAN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  artistProfile ArtistProfile?
+  subscriptions Subscription[]
+  comments      Comment[]
+  likes         Like[]
+  notifications Notification[]
+}
+
+enum UserRole {
+  ARTIST
+  FAN
+  ADMIN
+}
+
+model ArtistProfile {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  displayName       String
+  slug              String   @unique
+  bio               String?  @db.Text
+  headerImageUrl    String?
+  genreTags         String[]
+  socialLinks       Json?
+  isVerified        Boolean  @default(false)
+  isFoundingArtist  Boolean  @default(false)
+  commissionRate    Decimal  @default(0.05) @db.Decimal(4, 3)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tiers             MembershipTier[]
+  posts             Post[]
+  payouts           Payout[]
+}
+
+model MembershipTier {
+  id          String   @id @default(uuid())
+  artistId    String
+  name        String
+  description String?  @db.Text
+  priceCents  Int
+  position    Int      @default(0)
+  isActive    Boolean  @default(true)
+  benefits    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  artist        ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  subscriptions Subscription[]
+  
+  @@index([artistId, position])
+}
+
+model Subscription {
+  id                    String             @id @default(uuid())
+  fanId                 String
+  tierId                String
+  status                SubscriptionStatus @default(ACTIVE)
+  startedAt             DateTime           @default(now())
+  currentPeriodStart    DateTime           @default(now())
+  currentPeriodEnd      DateTime
+  cancelAtPeriodEnd     Boolean            @default(false)
+  omiseCustomerId       String?
+  omiseSubscriptionId   String?
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  
+  fan                   User               @relation(fields: [fanId], references: [id], onDelete: Cascade)
+  tier                  MembershipTier     @relation(fields: [tierId], references: [id], onDelete: Cascade)
+  payments              Payment[]
+  
+  @@index([fanId, status])
+  @@index([tierId, status])
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  FAILED
+}
+
+model Post {
+  id            String     @id @default(uuid())
+  artistId      String
+  title         String
+  content       String?    @db.Text
+  postType      PostType
+  mediaUrls     Json?
+  tierAccess    String[]
+  isPublic      Boolean    @default(false)
+  isPublished   Boolean    @default(false)
+  publishedAt   DateTime?
+  scheduledFor  DateTime?
+  viewsCount    Int        @default(0)
+  likesCount    Int        @default(0)
+  commentsCount Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  
+  artist        ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  comments      Comment[]
+  likes         Like[]
+  
+  @@index([artistId, publishedAt])
+}
+
+enum PostType {
+  TEXT
+  IMAGE
+  AUDIO
+  VIDEO
+  FILE
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([postId])
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([postId, userId])
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  subscriptionId  String
+  amountCents     Int
+  currency        String        @default("THB")
+  status          PaymentStatus @default(PENDING)
+  omiseChargeId   String?
+  paymentMethod   PaymentMethod
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  subscription    Subscription  @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  @@index([subscriptionId, status])
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+}
+
+enum PaymentMethod {
+  CARD
+  PROMPTPAY
+  INTERNET_BANKING
+}
+
+model Payout {
+  id          String       @id @default(uuid())
+  artistId    String
+  amountCents Int
+  status      PayoutStatus @default(PENDING)
+  periodStart DateTime
+  periodEnd   DateTime
+  bankAccount Json?
+  processedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  
+  artist      ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  
+  @@index([artistId, status])
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  type      NotificationType
+  title     String
+  message   String           @db.Text
+  linkUrl   String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, isRead])
+}
+
+enum NotificationType {
+  NEW_MEMBER
+  NEW_POST
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  SUBSCRIPTION_RENEWED
+  SUBSCRIPTION_CANCELLED
+}
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

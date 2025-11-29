@@ -251,7 +251,15 @@ export default function AnalyticsPage() {
   )
 }
 
-function MetricCard({ title, value, change, icon: Icon, color }: any) {
+type MetricCardProps = {
+  title: string;
+  value: number | string;
+  change: number;
+  icon: React.ElementType;
+  color: 'green' | 'blue' | 'purple' | 'pink';
+};
+
+function MetricCard({ title, value, change, icon: Icon, color }: MetricCardProps) {
   const isPositive = change >= 0
   const colors = {
     green: 'bg-green-100 text-green-600',

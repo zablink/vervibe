@@ -16,7 +16,6 @@
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^5.2.2",
-    "@prisma/client": "^7.0.1",
     "@supabase/auth-helpers-nextjs": "^0.15.0",
     "@supabase/supabase-js": "^2.86.0",
     "@types/node": "^24.10.1",
@@ -28,7 +27,6 @@
     "next": "^14.2.33",
     "omise": "^1.1.0",
     "postcss": "^8.5.6",
-    "prisma": "^7.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.67.0",
@@ -38,5 +36,10 @@
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
     "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@prisma/client": "^5.15.0",
+    "@tailwindcss/postcss": "^4.1.17",
+    "prisma": "^5.15.0"
   }
 }

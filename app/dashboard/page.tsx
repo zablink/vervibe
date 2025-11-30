@@ -22,7 +22,7 @@ export default function Dashboard() {
     // Fetch profile from database or set dummy profile
     setProfile({
       role: 'ARTIST', // or 'FAN'
-      displayName: user.fullName || user.email || 'Artist',
+      displayName: (user && (user.fullName || user.email)) || 'Artist',
     })
     setLoading(false)
   }, [user])

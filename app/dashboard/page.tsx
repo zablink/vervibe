@@ -17,7 +17,7 @@ export default function Dashboard() {
     let unsub: any = null
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      alert('[dashboard] getUser: ' + JSON.stringify(user))
+      // ...existing code...
       if (user) {
         setUser(user)
         setProfile({
@@ -28,7 +28,7 @@ export default function Dashboard() {
       } else {
         // subscribe to auth state change
         unsub = supabase.auth.onAuthStateChange((event, session) => {
-          alert('[dashboard] onAuthStateChange: ' + event + ' ' + JSON.stringify(session))
+          // ...existing code...
           if (session?.user) {
             setUser(session.user)
             setProfile({

@@ -12,9 +12,7 @@ function AuthCallbackInner() {
     const exchangeSession = async () => {
       const code = searchParams.get('code')
       if (code) {
-        alert('[callback] code: ' + code)
         await supabase.auth.exchangeCodeForSession(code)
-        alert('[callback] exchanged, redirecting to /dashboard')
         window.location.href = '/dashboard'
       } else {
         // Try to extract tokens from hash fragment
@@ -26,17 +24,14 @@ function AuthCallbackInner() {
           const expires_in = params.get('expires_in')
           const token_type = params.get('token_type')
           if (access_token && refresh_token) {
-            alert('[callback] found access_token in hash, setting session')
             await supabase.auth.setSession({
               access_token,
               refresh_token,
             })
-            alert('[callback] session set, redirecting to /dashboard')
             window.location.href = '/dashboard'
             return
           }
         }
-        alert('[callback] no code or access_token, redirecting to /auth/login')
         router.replace('/auth/login')
       }
     }

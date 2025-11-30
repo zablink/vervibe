@@ -12,19 +12,40 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
 
+
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) {
-        router.replace("/auth/login")
-        return
+    let unsub: any = null
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setUser(user)
+        setProfile({
+          role: "ARTIST",
+          displayName: (user as any).fullName || (user as any).email || "Artist",
+        })
+        setLoading(false)
+      } else {
+        // subscribe to auth state change
+        unsub = supabase.auth.onAuthStateChange((_event, session) => {
+          if (session?.user) {
+            setUser(session.user)
+            setProfile({
+              role: "ARTIST",
+              displayName: (session.user as any).fullName || (session.user as any).email || "Artist",
+            })
+            setLoading(false)
+          } else {
+            router.replace("/auth/login")
+          }
+        })
       }
-      setUser(user)
-      setProfile({
-        role: "ARTIST",
-        displayName: (user as any).fullName || (user as any).email || "Artist",
-      })
-      setLoading(false)
-    })
+    }
+    checkUser()
+    return () => {
+      if (unsub && unsub.data && unsub.data.subscription) {
+        unsub.data.subscription.unsubscribe()
+      }
+    }
   }, [router])
 
   if (loading) {

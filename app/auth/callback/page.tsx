@@ -13,7 +13,7 @@ function AuthCallbackInner() {
       const code = searchParams.get('code')
       if (code) {
         await supabase.auth.exchangeCodeForSession(code)
-        window.location.replace('/dashboard')
+        window.location.href = '/dashboard'
       } else {
         router.replace('/auth/login')
       }

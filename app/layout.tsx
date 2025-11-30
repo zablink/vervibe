@@ -1,9 +1,10 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
+import { Inter, Sarabun } from 'next/font/google'
 import type { Metadata } from 'next'
 import NavbarWrapper from '@/components/NavbarWrapper'
 
 const inter = Inter({ subsets: ['latin'] })
+const sarabun = Sarabun({ subsets: ['thai', 'latin'], weight: ['400', '500', '700'] })
 
 export const metadata: Metadata = {
   title: 'VerVibe - แพลตฟอร์มศิลปินไทย',
@@ -17,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="th">
-      <body className={inter.className}>
+      <body className={inter.className + ' ' + sarabun.className}>
         <NavbarWrapper>{children}</NavbarWrapper>
       </body>
     </html>

@@ -18,6 +18,9 @@ export default function Dashboard() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       console.log('[dashboard] getUser:', user)
+      try {
+        localStorage.setItem('debug_user', JSON.stringify(user));
+      } catch (e) {}
       if (user) {
         setUser(user)
         setProfile({
@@ -29,6 +32,9 @@ export default function Dashboard() {
         // subscribe to auth state change
         unsub = supabase.auth.onAuthStateChange((event, session) => {
           console.log('[dashboard] onAuthStateChange:', event, session)
+          try {
+            localStorage.setItem('debug_session', JSON.stringify(session));
+          } catch (e) {}
           if (session?.user) {
             setUser(session.user)
             setProfile({

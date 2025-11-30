@@ -4,36 +4,7 @@ import { Music, Users, DollarSign, Star } from 'lucide-react'
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2">
-              <Music className="h-8 w-8 text-primary-600" />
-              <span className="text-2xl font-bold text-primary-600">VerVibe</span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/artists" className="text-gray-700 hover:text-primary-600">
-                ศิลปิน
-              </Link>
-              <Link href="/how-it-works" className="text-gray-700 hover:text-primary-600">
-                วิธีใช้งาน
-              </Link>
-              <Link href="/pricing" className="text-gray-700 hover:text-primary-600">
-                ราคา
-              </Link>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <Link href="/auth/login" className="text-gray-700 hover:text-primary-600">
-                เข้าสู่ระบบ
-              </Link>
-              <Link href="/auth/signup" className="btn-primary">
-                เริ่มต้นใช้งาน
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
+
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary-50 to-purple-100 py-20">

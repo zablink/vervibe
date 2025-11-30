@@ -12,9 +12,12 @@ function AuthCallbackInner() {
     const exchangeSession = async () => {
       const code = searchParams.get('code')
       if (code) {
+        alert('[callback] code: ' + code)
         await supabase.auth.exchangeCodeForSession(code)
+        alert('[callback] exchanged, redirecting to /dashboard')
         window.location.href = '/dashboard'
       } else {
+        alert('[callback] no code, redirecting to /auth/login')
         router.replace('/auth/login')
       }
     }

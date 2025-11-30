@@ -17,7 +17,26 @@ function AuthCallbackInner() {
         alert('[callback] exchanged, redirecting to /dashboard')
         window.location.href = '/dashboard'
       } else {
-        alert('[callback] no code, redirecting to /auth/login')
+        // Try to extract tokens from hash fragment
+        const hash = window.location.hash
+        if (hash && hash.includes('access_token')) {
+          const params = new URLSearchParams(hash.replace(/^#/, ''))
+          const access_token = params.get('access_token')
+          const refresh_token = params.get('refresh_token')
+          const expires_in = params.get('expires_in')
+          const token_type = params.get('token_type')
+          if (access_token && refresh_token) {
+            alert('[callback] found access_token in hash, setting session')
+            await supabase.auth.setSession({
+              access_token,
+              refresh_token,
+            })
+            alert('[callback] session set, redirecting to /dashboard')
+            window.location.href = '/dashboard'
+            return
+          }
+        }
+        alert('[callback] no code or access_token, redirecting to /auth/login')
         router.replace('/auth/login')
       }
     }

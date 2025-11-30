@@ -20,9 +20,10 @@ export default function Dashboard() {
       return
     }
     // Fetch profile from database or set dummy profile
+    const u = user as any
     setProfile({
       role: 'ARTIST', // or 'FAN'
-      displayName: (user && (user.fullName || user.email)) || 'Artist',
+      displayName: (u && (u.fullName || u.email)) || 'Artist',
     })
     setLoading(false)
   }, [user])

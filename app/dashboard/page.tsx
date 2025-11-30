@@ -1,32 +1,31 @@
-'use client'
+"use client"
 
-
-import { useContext, useEffect, useState } from 'react'
-import { BarChart3, Users, DollarSign, TrendingUp, Plus } from 'lucide-react'
-import Link from 'next/link'
-
-// Context for user from NavbarWrapper
-const UserContext = (globalThis as any).NavbarUserContext || null
+import { useEffect, useState } from "react"
+import { supabase } from "@/lib/supabase"
+import { useRouter } from "next/navigation"
+import { BarChart3, Users, DollarSign, TrendingUp, Plus } from "lucide-react"
+import Link from "next/link"
 
 export default function Dashboard() {
-  // Try to get user from context (NavbarWrapper)
-  const user = useContext(UserContext)
+  const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
-    if (!user) {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        router.replace("/auth/login")
+        return
+      }
+      setUser(user)
+      setProfile({
+        role: "ARTIST",
+        displayName: (user as any).fullName || (user as any).email || "Artist",
+      })
       setLoading(false)
-      return
-    }
-    // Fetch profile from database or set dummy profile
-    const u = user as any
-    setProfile({
-      role: 'ARTIST', // or 'FAN'
-      displayName: (u && (u.fullName || u.email)) || 'Artist',
     })
-    setLoading(false)
-  }, [user])
+  }, [router])
 
   if (loading) {
     return (
@@ -39,14 +38,7 @@ export default function Dashboard() {
     )
   }
 
-  if (!user) {
-    if (typeof window !== 'undefined') {
-      window.location.replace('/auth/login')
-    }
-    return null
-  }
-
-  if (profile?.role === 'ARTIST') {
+  if (profile?.role === "ARTIST") {
     return <ArtistDashboard user={user} profile={profile} />
   }
 
@@ -63,8 +55,6 @@ function ArtistDashboard({ user, profile }: any) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
-      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -186,30 +176,10 @@ function ArtistDashboard({ user, profile }: any) {
 
 function FanDashboard({ user, profile }: any) {
   return (
-    <div className="min-h-screen bg-gray-50">
-
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">ฟีดของคุณ</h1>
-        
-        <div className="grid md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 space-y-6">
-            {/* Feed posts would go here */}
-            <div className="card">
-              <p className="text-gray-600">ยังไม่มีโพสต์</p>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <div className="card">
-              <h2 className="font-bold mb-4">สมาชิกของคุณ</h2>
-              <p className="text-gray-600">คุณยังไม่ได้สมัครสมาชิกศิลปินคนใด</p>
-              <Link href="/artists" className="btn-primary w-full mt-4 text-center block">
-                สำรวจศิลปิน
-              </Link>
-            </div>
-          </div>
-        </div>
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold mb-4">Welcome, {profile.displayName}!</h1>
+        <p>ฟีเจอร์สำหรับแฟนคลับจะมาเร็วๆ นี้</p>
       </div>
     </div>
   )

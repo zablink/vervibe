@@ -28,18 +28,25 @@ export default function Navbar({ user }: { user: any }) {
                     3
                   </span>
                 </button>
-                <Link href="/dashboard" className="flex items-center space-x-2">
-                  {user.avatar_url || user.avatarUrl ? (
-                    <img
-                      src={user.avatar_url || user.avatarUrl}
-                      alt="avatar"
-                      className="h-8 w-8 rounded-full object-cover border border-gray-300"
-                    />
-                  ) : (
-                    <User className="h-6 w-6 text-gray-600" />
-                  )}
-                  <span className="hidden md:inline text-gray-700">{user.fullName || user.email}</span>
-                </Link>
+                <div className="relative group">
+                  <Link href="/dashboard" className="flex items-center space-x-2">
+                    {user.avatarUrl ? (
+                      <img
+                        src={user.avatarUrl}
+                        alt="avatar"
+                        className="h-8 w-8 rounded-full object-cover border border-gray-300"
+                      />
+                    ) : (
+                      <User className="h-6 w-6 text-gray-600" />
+                    )}
+                  </Link>
+                  {/* Dropdown on hover */}
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50">
+                    <div className="px-4 py-3 text-sm text-gray-700 border-b">เข้าสู่ระบบด้วย<br /><span className="font-medium break-all">{user.email}</span></div>
+                    <Link href="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">แดชบอร์ด</Link>
+                    <Link href="/auth/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">ออกจากระบบ</Link>
+                  </div>
+                </div>
               </>
             ) : (
               <>

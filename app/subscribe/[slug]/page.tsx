@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useSearchParams, useRouter } from 'next/navigation'
-import Navbar from '@/components/Navbar'
+
 import { CreditCard, Smartphone, Building, ArrowLeft, Check, Lock } from 'lucide-react'
 import { formatPrice } from '@/utils/tiers'
 
@@ -56,7 +56,7 @@ export default function SubscribePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar user={null} />
+
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}

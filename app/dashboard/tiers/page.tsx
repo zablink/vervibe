@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Navbar from '@/components/Navbar'
+
 import { Plus, Trash2 } from 'lucide-react'
 import { TIER_PRESETS, formatPrice } from '@/utils/tiers'
 
@@ -42,7 +42,7 @@ export default function TiersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar user={{ fullName: 'Artist' }} />
+
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">

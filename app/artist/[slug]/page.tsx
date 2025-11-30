@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import Navbar from '@/components/Navbar'
+
 import { 
   Star, 
   Users, 
@@ -116,7 +116,7 @@ export default function ArtistProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar user={null} />
+
       
       {/* Header Image */}
       <div className="relative h-80 bg-gradient-to-br from-primary-400 to-purple-600 overflow-hidden">

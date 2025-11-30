@@ -1,3 +1,4 @@
+
 import Link from 'next/link'
 import { Music, Bell, User } from 'lucide-react'
 
@@ -10,7 +11,6 @@ export default function Navbar({ user }: { user: any }) {
             <Music className="h-8 w-8 text-primary-600" />
             <span className="text-2xl font-bold text-primary-600">VerVibe</span>
           </Link>
-          
           <nav className="hidden md:flex space-x-8">
             <Link href="/artists" className="text-gray-700 hover:text-primary-600">
               ศิลปิน
@@ -19,7 +19,6 @@ export default function Navbar({ user }: { user: any }) {
               สำรวจ
             </Link>
           </nav>
-
           <div className="flex items-center space-x-4">
             {user ? (
               <>
@@ -30,8 +29,16 @@ export default function Navbar({ user }: { user: any }) {
                   </span>
                 </button>
                 <Link href="/dashboard" className="flex items-center space-x-2">
-                  <User className="h-6 w-6 text-gray-600" />
-                  <span className="hidden md:inline text-gray-700">{user.fullName}</span>
+                  {user.avatar_url || user.avatarUrl ? (
+                    <img
+                      src={user.avatar_url || user.avatarUrl}
+                      alt="avatar"
+                      className="h-8 w-8 rounded-full object-cover border border-gray-300"
+                    />
+                  ) : (
+                    <User className="h-6 w-6 text-gray-600" />
+                  )}
+                  <span className="hidden md:inline text-gray-700">{user.fullName || user.email}</span>
                 </Link>
               </>
             ) : (

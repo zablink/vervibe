@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Navbar from '@/components/Navbar'
+
 import { Image, Music, Video, FileText, Send, Eye } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
@@ -29,7 +29,7 @@ export default function NewPostPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navbar user={{ fullName: 'Artist' }} />
+
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <h1 className="text-3xl font-bold mb-8">สร้างโพสต์ใหม่</h1>

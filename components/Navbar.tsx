@@ -22,12 +22,12 @@ export default function Navbar({ user }: { user: any }) {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <button className="relative p-2 text-gray-600 hover:text-primary-600">
+                <a href="/notifications" className="relative p-2 text-gray-600 hover:text-primary-600">
                   <Bell className="h-6 w-6" />
                   <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                     3
                   </span>
-                </button>
+                </a>
                 <div className="relative group">
                   <Link href="/dashboard" className="flex items-center space-x-2">
                     {user.avatarUrl ? (

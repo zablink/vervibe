@@ -1,39 +1,31 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { useRouter } from 'next/navigation'
 
+import { useContext, useEffect, useState } from 'react'
 import { BarChart3, Users, DollarSign, TrendingUp, Plus } from 'lucide-react'
 import Link from 'next/link'
 
+// Context for user from NavbarWrapper
+const UserContext = (globalThis as any).NavbarUserContext || null
+
 export default function Dashboard() {
-  const [user, setUser] = useState<any>(null)
+  // Try to get user from context (NavbarWrapper)
+  const user = useContext(UserContext)
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        router.push('/auth/login')
-        return
-      }
-      setUser(user)
-      
-      // Fetch profile from database
-      // This would be replaced with actual API call
-      setProfile({
-        role: 'ARTIST', // or 'FAN'
-        displayName: 'Artist Name',
-      })
-      
+    if (!user) {
       setLoading(false)
+      return
     }
-
-    getUser()
-  }, [router])
+    // Fetch profile from database or set dummy profile
+    setProfile({
+      role: 'ARTIST', // or 'FAN'
+      displayName: user.fullName || user.email || 'Artist',
+    })
+    setLoading(false)
+  }, [user])
 
   if (loading) {
     return (
@@ -44,6 +36,13 @@ export default function Dashboard() {
         </div>
       </div>
     )
+  }
+
+  if (!user) {
+    if (typeof window !== 'undefined') {
+      window.location.replace('/auth/login')
+    }
+    return null
   }
 
   if (profile?.role === 'ARTIST') {

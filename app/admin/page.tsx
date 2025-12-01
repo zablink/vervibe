@@ -198,47 +198,52 @@ function OverviewTab() {
   )
 }
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ชื่อ</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สมาชิก</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">รายได้</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สถานะ</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">การกระทำ</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {/* Sample data */}
-            <tr>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                    <Music className="h-5 w-5 text-primary-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="font-medium">Artist Name</p>
-                    <p className="text-sm text-gray-500">@artistslug</p>
-                  </div>
+// ArtistsTab for the artist table
+function ArtistsTab() {
+  return (
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-gray-50">
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ชื่อ</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สมาชิก</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">รายได้</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สถานะ</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">การกระทำ</th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200">
+          {/* Sample data */}
+          <tr>
+            <td className="px-6 py-4">
+              <div className="flex items-center">
+                <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                  <Music className="h-5 w-5 text-primary-600" />
                 </div>
-              </td>
-              <td className="px-6 py-4">175</td>
-              <td className="px-6 py-4">฿16,325</td>
-              <td className="px-6 py-4">
-                <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
-                  Active
-                </span>
-              </td>
-              <td className="px-6 py-4">
-                <button className="text-primary-600 hover:text-primary-700 text-sm">
-                  จัดการ
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <div className="ml-4">
+                  <p className="font-medium">Artist Name</p>
+                  <p className="text-sm text-gray-500">@artistslug</p>
+                </div>
+              </div>
+            </td>
+            <td className="px-6 py-4">175</td>
+            <td className="px-6 py-4">฿16,325</td>
+            <td className="px-6 py-4">
+              <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">
+                Active
+              </span>
+            </td>
+            <td className="px-6 py-4">
+              <button className="text-primary-600 hover:text-primary-700 text-sm">
+                จัดการ
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
     </div>
   )
 }

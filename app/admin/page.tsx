@@ -31,7 +31,7 @@ export default function AdminDashboard() {
       
         // Check if user is admin (implement proper role check)
         setUser(user)
-        setLoading(false)
+        setLoading(false) 
 
       // TODO: Implement site setting save logic to DB
     }

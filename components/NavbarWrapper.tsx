@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import Navbar from '@/components/Navbar'
 
-export default function NavbarWrapper({ children }: { children: React.ReactNode }) {
+
+export default function NavbarWrapper({ children, logoUrl }: { children: React.ReactNode, logoUrl?: string }) {
   const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export default function NavbarWrapper({ children }: { children: React.ReactNode 
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar user={user} logoUrl={logoUrl} />
       {children}
     </>
   )

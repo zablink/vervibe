@@ -29,9 +29,11 @@ export default function AdminDashboard() {
         return
       }
       
-      // Check if user is admin (implement proper role check)
-      setUser(user)
-      setLoading(false)
+        // Check if user is admin (implement proper role check)
+        setUser(user)
+        setLoading(false)
+
+      // TODO: Implement site setting save logic to DB
     }
 
     checkAdmin()
@@ -183,26 +185,20 @@ function OverviewTab() {
             { action: 'อัพโหลดโพสต์ใหม่', user: 'Artist A', time: '1 ชั่วโมงที่แล้ว' },
           ].map((activity, i) => (
             <div key={i} className="p-3 border border-gray-200 rounded-lg flex justify-between items-center">
-              <div>
-                <p className="font-medium">{activity.action}</p>
-                <p className="text-sm text-gray-600">{activity.user}</p>
-              </div>
-              <span className="text-sm text-gray-500">{activity.time}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ArtistsTab() {
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h3 className="text-lg font-bold">รายชื่อศิลปิน</h3>
-        <button className="btn-primary">เพิ่มศิลปิน</button>
-      </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <div className="flex items-center space-x-2">
+                          <span>สีหลัก (Primary Color)</span>
+                        </div>
+                      </label>
+                      <input
+                        type="color"
+                        className="input input-bordered w-16 h-10 p-0 border-none"
+                        value={settings.primaryColor || '#d946ef'}
+                        onChange={e => setSettings({ ...settings, primaryColor: e.target.value })}
+                      />
+                      <span className="ml-2">{settings.primaryColor || '#d946ef'}</span>
+                    </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -281,18 +277,55 @@ function UsersTab() {
 }
 
 function SettingsTab() {
+
   const [settings, setSettings] = useState({
-    siteName: 'VerVibe',
-    siteTitle: 'VerVibe - แพลตฟอร์มศิลปินไทย',
+    siteName: '',
+    siteTitle: '',
     favicon: '',
     logo: '',
-    primaryColor: '#d946ef',
-    description: 'แพลตฟอร์มให้ศิลปินหารายได้จากแฟนคลับตรงๆ',
+    primaryColor: '',
+    description: '',
   })
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
+
+  // Load settings from DB on mount
+  useEffect(() => {
+    async function loadSettings() {
+      setLoading(true)
+      const keys = ['siteName', 'siteTitle', 'favicon', 'logo', 'primaryColor', 'description']
+      const results = await Promise.all(
+        keys.map(async (key) => {
+          const res = await fetch(`/api/site-setting?key=${key}`)
+          const data = await res.json()
+          return [key, data.value || '']
+        })
+      )
+      setSettings(Object.fromEntries(results))
+      setLoading(false)
+    }
+    loadSettings()
+  }, [])
 
   const handleSave = async () => {
-    // Save settings to database
-    alert('บันทึกการตั้งค่าเรียบร้อย')
+    setLoading(true)
+    setMessage('')
+    const keys = Object.keys(settings)
+    try {
+      await Promise.all(
+        keys.map(async (key) => {
+          await fetch('/api/site-setting', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ key, value: settings[key as keyof typeof settings] }),
+          })
+        })
+      )
+      setMessage('บันทึกการตั้งค่าเรียบร้อย')
+    } catch (e) {
+      setMessage('เกิดข้อผิดพลาดในการบันทึก')
+    }
+    setLoading(false)
   }
 
   return (
@@ -340,30 +373,34 @@ function SettingsTab() {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             <div className="flex items-center space-x-2">
               <Image className="h-4 w-4" />
-              <span>โลโก้</span>
+              <span>โลโก้ (URL)</span>
             </div>
           </label>
           <input
-            type="file"
-            accept="image/*"
+            type="text"
+            value={settings.logo}
+            onChange={e => setSettings({ ...settings, logo: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            placeholder="https://..."
           />
-          <p className="text-sm text-gray-500 mt-1">แนะนำ: PNG/SVG, 200x50px</p>
+          <p className="text-sm text-gray-500 mt-1">แนะนำ: PNG/SVG, 200x50px (ใส่ URL รูปภาพ)</p>
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             <div className="flex items-center space-x-2">
               <FileText className="h-4 w-4" />
-              <span>Favicon</span>
+              <span>Favicon (URL)</span>
             </div>
           </label>
           <input
-            type="file"
-            accept="image/*"
+            type="text"
+            value={settings.favicon}
+            onChange={e => setSettings({ ...settings, favicon: e.target.value })}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+            placeholder="https://..."
           />
-          <p className="text-sm text-gray-500 mt-1">แนะนำ: ICO/PNG, 32x32px</p>
+          <p className="text-sm text-gray-500 mt-1">แนะนำ: ICO/PNG, 32x32px (ใส่ URL รูปภาพ)</p>
         </div>
 
         <div>
@@ -388,9 +425,10 @@ function SettingsTab() {
         </div>
 
         <div className="pt-4">
-          <button onClick={handleSave} className="btn-primary">
-            บันทึกการตั้งค่า
+          <button onClick={handleSave} className="btn-primary" disabled={loading}>
+            {loading ? 'กำลังบันทึก...' : 'บันทึกการตั้งค่า'}
           </button>
+          {message && <div className="mt-3 text-green-600 font-medium">{message}</div>}
         </div>
       </div>
     </div>

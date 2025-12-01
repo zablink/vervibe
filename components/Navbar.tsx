@@ -2,14 +2,18 @@
 import Link from 'next/link'
 import { Music, Bell, User } from 'lucide-react'
 
-export default function Navbar({ user }: { user: any }) {
+export default function Navbar({ user, logoUrl }: { user: any, logoUrl?: string }) {
   return (
     <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link href="/" className="flex items-center space-x-2">
-            <Music className="h-8 w-8 text-primary-600" />
-            <span className="text-2xl font-bold text-primary-600">VerVibe</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt="logo" className="h-8 w-auto max-w-[120px]" />
+            ) : (
+              <Music className="h-8 w-8" style={{ color: 'var(--vv-primary, #d946ef)' }} />
+            )}
+            <span className="text-2xl font-bold" style={{ color: 'var(--vv-primary, #d946ef)' }}>VerVibe</span>
           </Link>
           <nav className="hidden md:flex space-x-8">
             <Link href="/artists" className="text-gray-700 hover:text-primary-600">
@@ -43,7 +47,11 @@ export default function Navbar({ user }: { user: any }) {
                   {/* Dropdown on hover */}
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50">
                     <div className="px-4 py-3 text-sm text-gray-700 border-b">เข้าสู่ระบบด้วย<br /><span className="font-medium break-all">{user.email}</span></div>
-                    <Link href="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">แดชบอร์ด</Link>
+                    {user.role === 'ADMIN' ? (
+                      <Link href="/admin" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">แดชบอร์ดแอดมิน</Link>
+                    ) : (
+                      <Link href="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">แดชบอร์ด</Link>
+                    )}
                     {user.role === 'FAN' && (
                       <Link href="/apply-artist" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">สมัคร Creator, Artist</Link>
                     )}

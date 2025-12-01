@@ -44,6 +44,9 @@ export default function Navbar({ user }: { user: any }) {
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity z-50">
                     <div className="px-4 py-3 text-sm text-gray-700 border-b">เข้าสู่ระบบด้วย<br /><span className="font-medium break-all">{user.email}</span></div>
                     <Link href="/dashboard" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">แดชบอร์ด</Link>
+                    {user.role === 'FAN' && (
+                      <Link href="/apply-artist" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">สมัคร Creator, Artist</Link>
+                    )}
                     <Link href="/auth/logout" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">ออกจากระบบ</Link>
                   </div>
                 </div>

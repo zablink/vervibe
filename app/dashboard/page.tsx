@@ -96,7 +96,13 @@ export default function Dashboard() {
     return <ArtistDashboard user={user} profile={profile} />
   }
 
-  return <FanDashboard user={user} profile={profile} />
+  // Redirect FAN to home page
+  if (profile?.role === "FAN") {
+    router.replace("/")
+    return null
+  }
+
+  return null
 }
 
 function ArtistDashboard({ user, profile }: any) {
@@ -228,20 +234,4 @@ function ArtistDashboard({ user, profile }: any) {
   )
 }
 
-function FanDashboard({ user, profile }: any) {
-  const router = useRouter();
-  return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold mb-4">Welcome, {profile.displayName}!</h1>
-        <p>ฟีเจอร์สำหรับแฟนคลับจะมาเร็วๆ นี้</p>
-        <button
-          className="btn-primary mt-6 px-6 py-3 text-lg font-semibold"
-          onClick={() => router.push('/apply-artist')}
-        >
-          สมัครเป็นศิลปิน
-        </button>
-      </div>
-    </div>
-  )
-}
+// (FanDashboard component removed, FAN will be redirected to home page)

@@ -92,16 +92,17 @@ export default function Dashboard() {
     router.push('/apply-artist')
   }
 
+  if (profile?.role === "ADMIN") {
+    router.replace("/admin")
+    return null
+  }
   if (profile?.role === "ARTIST") {
     return <ArtistDashboard user={user} profile={profile} />
   }
-
-  // Redirect FAN to home page
   if (profile?.role === "FAN") {
     router.replace("/")
     return null
   }
-
   return null
 }
 

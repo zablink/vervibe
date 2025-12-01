@@ -159,6 +159,7 @@ export default function AdminDashboard() {
   )
 }
 
+// Move OverviewTab above AdminDashboard to avoid hoisting/syntax issues
 function OverviewTab() {
   return (
     <div className="space-y-6">
@@ -178,6 +179,24 @@ function OverviewTab() {
 
       <div>
         <h3 className="text-lg font-bold mb-4">กิจกรรมล่าสุด</h3>
+        <div className="space-y-2">
+          {[
+            { action: 'ศิลปินใหม่ลงทะเบียน', user: 'John Doe', time: '5 นาทีที่แล้ว' },
+            { action: 'สมัครสมาชิก Tier VIP', user: 'Jane Smith', time: '15 นาทีที่แล้ว' },
+            { action: 'อัพโหลดโพสต์ใหม่', user: 'Artist A', time: '1 ชั่วโมงที่แล้ว' },
+          ].map((activity, i) => (
+            <div key={i} className="p-3 border border-gray-200 rounded-lg flex justify-between items-center">
+              <div>
+                <span className="font-medium">{activity.user}</span> {activity.action}
+              </div>
+              <span className="text-xs text-gray-500">{activity.time}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
         <div className="space-y-2">
           {[
             { action: 'ศิลปินใหม่ลงทะเบียน', user: 'John Doe', time: '5 นาทีที่แล้ว' },

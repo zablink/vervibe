@@ -29,7 +29,7 @@ export default function Home() {
         <h1 className="text-3xl font-bold mb-8 text-center">อัปเดตใหม่จากศิลปินและ Creator</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {feed.map(post => (
-            <div key={post.id} className="bg-white rounded-xl shadow p-6 flex flex-col">
+            <div key={post.id} className="bg-white rounded-xl shadow p-6 flex flex-col transition-transform duration-200 hover:-translate-y-1 hover:shadow-2xl hover:border-primary-300 hover:border">
               <div className="flex items-center mb-4">
                 <img src={post.artist.avatar} alt="avatar" className="h-12 w-12 rounded-full object-cover border mr-3" />
                 <div>

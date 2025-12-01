@@ -197,27 +197,6 @@ function OverviewTab() {
     </div>
   )
 }
-        <div className="space-y-2">
-          {[
-            { action: 'ศิลปินใหม่ลงทะเบียน', user: 'John Doe', time: '5 นาทีที่แล้ว' },
-            { action: 'สมัครสมาชิก Tier VIP', user: 'Jane Smith', time: '15 นาทีที่แล้ว' },
-            { action: 'อัพโหลดโพสต์ใหม่', user: 'Artist A', time: '1 ชั่วโมงที่แล้ว' },
-          ].map((activity, i) => (
-            <div key={i} className="p-3 border border-gray-200 rounded-lg flex justify-between items-center">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        <div className="flex items-center space-x-2">
-                          <span>สีหลัก (Primary Color)</span>
-                        </div>
-                      </label>
-                      <input
-                        type="color"
-                        className="input input-bordered w-16 h-10 p-0 border-none"
-                        value={settings.primaryColor || '#d946ef'}
-                        onChange={e => setSettings({ ...settings, primaryColor: e.target.value })}
-                      />
-                      <span className="ml-2">{settings.primaryColor || '#d946ef'}</span>
-                    </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">

@@ -20,22 +20,48 @@ export default function Dashboard() {
       // ...existing code...
       if (user) {
         setUser(user)
-        setProfile({
-          role: "ARTIST",
-          displayName: (user as any).fullName || (user as any).email || "Artist",
+        // Call API to ensure user exists in DB and get role
+        fetch('/api/user/init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: user.id,
+            email: user.email,
+            fullName: user.user_metadata?.fullName || '',
+            avatarUrl: user.user_metadata?.avatar_url || user.user_metadata?.picture || '',
+          }),
         })
-        setLoading(false)
+          .then(res => res.json())
+          .then(data => {
+            setProfile({
+              role: data.user?.role || 'FAN',
+              displayName: data.user?.fullName || user.email || 'User',
+            })
+            setLoading(false)
+          })
       } else {
         // subscribe to auth state change
         unsub = supabase.auth.onAuthStateChange((event, session) => {
-          // ...existing code...
           if (session?.user) {
             setUser(session.user)
-            setProfile({
-              role: "ARTIST",
-              displayName: (session.user as any).fullName || (session.user as any).email || "Artist",
+            fetch('/api/user/init', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: session.user.id,
+                email: session.user.email,
+                fullName: session.user.user_metadata?.fullName || '',
+                avatarUrl: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture || '',
+              }),
             })
-            setLoading(false)
+              .then(res => res.json())
+              .then(data => {
+                setProfile({
+                  role: data.user?.role || 'FAN',
+                  displayName: data.user?.fullName || session.user.email || 'User',
+                })
+                setLoading(false)
+              })
           } else {
             router.replace("/auth/login")
           }
@@ -59,6 +85,11 @@ export default function Dashboard() {
         </div>
       </div>
     )
+  }
+
+  // Button to apply as artist if role is FAN
+  const handleApplyArtist = () => {
+    router.push('/apply-artist')
   }
 
   if (profile?.role === "ARTIST") {
@@ -198,11 +229,18 @@ function ArtistDashboard({ user, profile }: any) {
 }
 
 function FanDashboard({ user, profile }: any) {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-4">Welcome, {profile.displayName}!</h1>
         <p>ฟีเจอร์สำหรับแฟนคลับจะมาเร็วๆ นี้</p>
+        <button
+          className="btn-primary mt-6 px-6 py-3 text-lg font-semibold"
+          onClick={() => router.push('/apply-artist')}
+        >
+          สมัครเป็นศิลปิน
+        </button>
       </div>
     </div>
   )

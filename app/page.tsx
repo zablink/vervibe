@@ -1,4 +1,4 @@
-
+"use client"
 import Link from 'next/link'
 import { Music, Users, DollarSign, Star, User, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'

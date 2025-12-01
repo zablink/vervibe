@@ -244,9 +244,7 @@ function ArtistsTab() {
     </div>
   )
 }
-    </div>
-  )
-}
+
 
 function UsersTab() {
   return (
